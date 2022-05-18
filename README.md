@@ -5,4 +5,5 @@ Trade BTC on ByBit by simply setting up TradingView alerts
 Simple Tradingbot using Python and the ByBit API. It uses signals from TradingView strategies in order to execute market buy/sell orders.
 
 # Showcase
-
+![Screenshot1](position_opened.PNG)
+![Screenshot2](alert.PNG)
