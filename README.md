@@ -6,5 +6,6 @@ Simple Tradingbot using Python and the ByBit API. It uses signals from TradingVi
 
 # Showcase
 
-![Screenshot](position_opened.png)
-![Screenshot](alert.png)
+![Screenshot1](position_opened.PNG)
+![Screenshot2](alert.png)
+![Test Image 4](https://github.com/tograh/testrepository/3DTest.png 1.8k)
