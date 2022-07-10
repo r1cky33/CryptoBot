@@ -18,7 +18,8 @@ def get_qty(risk, balance, timeframe, current_price):
     # get atr based on the TF; factor depending on the strategy
     atr = 0
     if timeframe == '10m':
-        atr = get_atr('15m') * 0.66
+        atr = get_atr('15m')
+        atr['value'] * 0.66
     elif timeframe == '15m':
         atr = get_atr('15m')
     elif timeframe == '30m':

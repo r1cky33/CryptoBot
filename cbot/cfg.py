@@ -10,7 +10,7 @@ taapi_key       = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbHVlIjoiNjI1NWMwOTc0
 taapi_endpoint  = f'https://api.taapi.io/atr'
 
 # tv strategy_secret
-strategy_secret = '{censored}'
+strategy_secret = 'Xw72xKxPTTiQ1zacrjsJ'
 
 # position settings
 qty10m = 0
