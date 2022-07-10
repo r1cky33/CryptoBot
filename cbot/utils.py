@@ -17,14 +17,16 @@ def get_atr(interval):
 def get_qty(risk, balance, timeframe, current_price):
     # get atr based on the TF; factor depending on the strategy
     atr = 0
-    if timeframe == '15m':
+    if timeframe == '10m':
+        atr = get_atr('15m') * 0.66
+    elif timeframe == '15m':
         atr = get_atr('15m')
     elif timeframe == '30m':
         atr = get_atr('30m')
     else:
         return None
 
-    print("[BOT] Current ATR:", atr)
+    print("[bot] current atr:", atr)
     print(type(current_price))
     print(type(atr['value']))
 

@@ -1,4 +1,3 @@
-from bot_all import set_quantity
 import utils
 import bybit
 import cfg
@@ -7,72 +6,100 @@ import time
 from flask import Flask, request, abort
 
 app = Flask(__name__)
+app.testing = True
 
 myBybit = bybit.bybit()
 
-# position settings
-qty15m = 0
-qty30m = 0
-
-# webhook that receives tf signals
-@app.route('/webhook30m', methods=['POST'])
-def webhook30m():
-	print("[BOT] Webhook 30m received")
+# webhooks that receives tf signals
+@app.route('/btc_10m_3', methods=['POST'])
+def btc_10m_3():
+	print("[bot] signal btc-10m-3 received")
 
 	dictionary = request.get_json(force=True)
-	print("[JSON]:", dictionary)
-
-        global qty30m = utils::utils.get_qty(6, 100, '30m', myBybit.get_current_price())
+	print("[json]:", dictionary)
+	
+	cfg.qty10m = utils.get_qty(3, 110, '10m', myBybit.get_current_price())
 
 	if dictionary["secret"] == cfg.strategy_secret:
 		if dictionary["command"] == "openlong":
-			print("[BOT] Opened LONG with qty:", set_quantity(6, 100, '30m'))
-			myBybit.market_buy(False, '30m')
+			print("[bot] opened LONG with qty:", cfg.qty10m)
+			myBybit.market_buy(False, cfg.qty10m)
 
 		if dictionary["command"] == "openshort":
-			print("[BOT] Opened SHORT with qty:", set_quantity(6, 100, '30m'))
-			bybit_sell(False, '30m')
+			print("[bot] opened SHORT with qty:", cfg.qty10m)
+			myBybit.market_sell(False, cfg.qty10m)
         
 		if dictionary["command"] == "closelong":
-			print("[BOT] Closing LONG\n")
-			bybit_sell(True, '30m')
+			print("[bot] closed LONG\n")
+			myBybit.market_sell(True, cfg.qty10m)
 
 		if dictionary["command"] == "closeshort":
-			print("[BOT] Closing SHORT\n")
-			bybit_buy(True, '30m')
+			print("[bot] closed SHORT\n")
+			myBybit.market_buy(True, cfg.qty10m)
 	else:
-		print("[BOT] NO SECRET:", dictionary)
+		print("[bot] no secret-key given:", dictionary)
 
 	print("-----------------------------")
 	return { "success": False, "message": "invalid"}
 
-@app.route('/webhook15m', methods=['POST'])
-def webhook15m():
-	print("[BOT] Webhook 15m received")
+@app.route('/btc_15m_1', methods=['POST'])
+def btc_15m_1():
+	print("[bot] signal btc-15m-1 received")
 
 	dictionary = request.get_json(force=True)
-	print("[JSON]:", dictionary)
-
-        global qty30m = utils::utils.get_qty(6, 100, '15m', myBybit.get_current_price())
+	print("[json]:", dictionary)
+	
+	cfg.qty15m = utils.get_qty(3, 110, '15m', myBybit.get_current_price())
 
 	if dictionary["secret"] == cfg.strategy_secret:
 		if dictionary["command"] == "openlong":
-			print("[BOT] Opened LONG with qty:", set_quantity(6, 100, '15m'))
-			bybit_buy(False, '15m')
+			print("[bot] opened LONG with qty:", cfg.qty15m)
+			myBybit.market_buy(False, cfg.qty15m)
 
 		if dictionary["command"] == "openshort":
-			print("[BOT] Opened SHORT with qty:", set_quantity(6, 100, '15m'))
-			bybit_sell(False, '15m')
+			print("[bot] opened SHORT with qty:", cfg.qty15m)
+			myBybit.market_sell(False, cfg.qty15m)
 
 		if dictionary["command"] == "closelong":
-			print("[BOT] Closing LONG\n")
-			bybit_sell(True, '15m')
+			print("[bot] closed LONG\n")
+			myBybit.market_sell(True, cfg.qty15m)
 
 		if dictionary["command"] == "closeshort":
-			print("[BOT] Closing SHORT\n")
-			bybit_buy(True, '15m')
+			print("[bot] closed SHORT\n")
+			myBybit.market_buy(True, cfg.qty15m)
 	else:
-		print("[BOT] NO SECRET:", dictionary)
+		print("[bot] no secret-key given:", dictionary)
+
+	print("-----------------------------")
+	return { "success": False, "message": "invalid"}
+
+@app.route('/btc_15m_2', methods=['POST'])
+def btc_15m_2():
+	print("[bot] signal btc-15m-2 received")
+
+	dictionary = request.get_json(force=True)
+	print("[json]:", dictionary)
+	
+	cfg.qty15m_2 = utils.get_qty(3, 110, '15m', myBybit.get_current_price())
+
+	if dictionary["secret"] == cfg.strategy_secret:
+		if dictionary["command"] == "openlong":
+			print("[bot] opened LONG with qty:", cfg.qty15m_2)
+			myBybit.market_buy(False, cfg.qty15m_2)
+
+		if dictionary["command"] == "openshort":
+			print("[bot] opened SHORT with qty:", cfg.qty15m_2)
+			myBybit.market_sell(False, cfg.qty15m_2)
+
+		if dictionary["command"] == "closelong":
+			print("[bot] closed LONG\n")
+			myBybit.market_sell(True, cfg.qty15m_2)
+
+		if dictionary["command"] == "closeshort":
+			print("[bot] closed SHORT\n")
+			myBybit.market_buy(True, cfg.qty15m_2)
+	else:
+		print("[bot] no secret-key given:", dictionary)
 
 	print("-----------------------------")
 	return { "success": False, "message": "invalid"}
