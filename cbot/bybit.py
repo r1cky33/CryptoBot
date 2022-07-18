@@ -32,7 +32,7 @@ class bybit:
             symbol=self.symbol,
             side="Buy",
             order_type="Market",
-            qty=qty,
+            qty=0.001,
             time_in_force="GoodTillCancel",
             reduce_only=b_reduce_only,
             close_on_trigger=False
@@ -43,7 +43,7 @@ class bybit:
             symbol=self.symbol,
             side="Sell",
             order_type="Market",
-            qty=qty,
+            qty=0.001,
             time_in_force="GoodTillCancel",
             reduce_only=b_reduce_only,
             close_on_trigger=False
