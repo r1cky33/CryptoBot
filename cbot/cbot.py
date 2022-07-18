@@ -1,4 +1,3 @@
-from bot_all import set_quantity
 import utils
 import bybit
 import cfg
@@ -7,76 +6,78 @@ import time
 from flask import Flask, request, abort
 
 app = Flask(__name__)
+app.testing = True
 
 myBybit = bybit.bybit()
 
-# position settings
-qty15m = 0
-qty30m = 0
+def worker(dictionary, qty):
+    if dictionary["secret"] == cfg.strategy_secret:
+        if dictionary["command"] == "openlong":
+            print("[bot] opened LONG with qty:", qty)
+            myBybit.market_buy(False, qty)
 
-# webhook that receives tf signals
-@app.route('/webhook30m', methods=['POST'])
-def webhook30m():
-	print("[BOT] Webhook 30m received")
+        if dictionary["command"] == "openshort":
+            print("[bot] opened SHORT with qty:", qty)
+            myBybit.market_sell(False, qty)
 
-	dictionary = request.get_json(force=True)
-	print("[JSON]:", dictionary)
+        if dictionary["command"] == "closelong":
+            print("[bot] closed LONG\n")
+            myBybit.market_sell(True, qty)
 
-        global qty30m = utils::utils.get_qty(6, 100, '30m', myBybit.get_current_price())
+        if dictionary["command"] == "closeshort":
+            print("[bot] closed SHORT\n")
+            myBybit.market_buy(True, qty)
+    else:
+        print("[bot] no secret-key given:", dictionary)
 
-	if dictionary["secret"] == cfg.strategy_secret:
-		if dictionary["command"] == "openlong":
-			print("[BOT] Opened LONG with qty:", set_quantity(6, 100, '30m'))
-			myBybit.market_buy(False, '30m')
+# webhooks that receives tf signals
 
-		if dictionary["command"] == "openshort":
-			print("[BOT] Opened SHORT with qty:", set_quantity(6, 100, '30m'))
-			bybit_sell(False, '30m')
-        
-		if dictionary["command"] == "closelong":
-			print("[BOT] Closing LONG\n")
-			bybit_sell(True, '30m')
+@app.route('/btc_10m_3', methods=['POST'])
+def btc_10m_3():
+    print("[bot] signal btc-10m-3 received")
 
-		if dictionary["command"] == "closeshort":
-			print("[BOT] Closing SHORT\n")
-			bybit_buy(True, '30m')
-	else:
-		print("[BOT] NO SECRET:", dictionary)
+    dictionary = request.get_json(force=True)
+    print("[json]:", dictionary)
 
-	print("-----------------------------")
-	return { "success": False, "message": "invalid"}
+    cfg.qty10m = utils.get_qty(3, 110, '10m', myBybit.get_current_price())
 
-@app.route('/webhook15m', methods=['POST'])
-def webhook15m():
-	print("[BOT] Webhook 15m received")
+    worker(dictionary, cfg.qty10m)
 
-	dictionary = request.get_json(force=True)
-	print("[JSON]:", dictionary)
+    print("-----------------------------")
+    return {"success": False, "message": "invalid"}
 
-        global qty30m = utils::utils.get_qty(6, 100, '15m', myBybit.get_current_price())
 
-	if dictionary["secret"] == cfg.strategy_secret:
-		if dictionary["command"] == "openlong":
-			print("[BOT] Opened LONG with qty:", set_quantity(6, 100, '15m'))
-			bybit_buy(False, '15m')
+@app.route('/btc_15m_1', methods=['POST'])
+def btc_15m_1():
+    print("[bot] signal btc-15m-1 received")
 
-		if dictionary["command"] == "openshort":
-			print("[BOT] Opened SHORT with qty:", set_quantity(6, 100, '15m'))
-			bybit_sell(False, '15m')
+    dictionary = request.get_json(force=True)
 
-		if dictionary["command"] == "closelong":
-			print("[BOT] Closing LONG\n")
-			bybit_sell(True, '15m')
+    print("[json]:", dictionary)
 
-		if dictionary["command"] == "closeshort":
-			print("[BOT] Closing SHORT\n")
-			bybit_buy(True, '15m')
-	else:
-		print("[BOT] NO SECRET:", dictionary)
+    cfg.qty15m = utils.get_qty(3, 110, '15m', myBybit.get_current_price())
 
-	print("-----------------------------")
-	return { "success": False, "message": "invalid"}
+    worker(dictionary, cfg.qty15m)
+
+    print("-----------------------------")
+    return {"success": False, "message": "invalid"}
+
+
+@app.route('/btc_15m_2', methods=['POST'])
+def btc_15m_2():
+    print("[bot] signal btc-15m-2 received")
+
+    dictionary = request.get_json(force=True)
+    print("[json]:", dictionary)
+
+    cfg.qty15m_2 = utils.get_qty(3, 110, '15m', myBybit.get_current_price())
+
+    worker(dictionary, cfg.qty15m_2)
+
+    print("-----------------------------")
+    return {"success": False, "message": "invalid"}
+
 
 # start srv
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=80)

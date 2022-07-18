@@ -13,5 +13,6 @@ taapi_endpoint  = f'https://api.taapi.io/atr'
 strategy_secret = '{censored}'
 
 # position settings
+qty10m = 0
 qty15m = 0
-qty30m = 0
+qty15m_2 = 0

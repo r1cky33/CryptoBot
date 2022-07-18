@@ -2,29 +2,36 @@ import cfg
 import requests
 
 # get atr
+
+
 def get_atr(interval):
-    parameters =  {
-	'secret':cfg.taapi_key,
-	'exchange':'binance',
-	'symbol':'BTC/USDT',
-	'interval':interval
+    parameters = {
+        'secret': cfg.taapi_key,
+        'exchange': 'binance',
+        'symbol': 'BTC/USDT',
+        'interval': interval
     }
 
     response = requests.get(url=cfg.taapi_endpoint, params=parameters)
     return response.json()
 
 # position quantity
+
+
 def get_qty(risk, balance, timeframe, current_price):
     # get atr based on the TF; factor depending on the strategy
     atr = 0
-    if timeframe == '15m':
+    if timeframe == '10m':
+        atr = get_atr('15m')
+        atr['value'] * 0.66
+    elif timeframe == '15m':
         atr = get_atr('15m')
     elif timeframe == '30m':
         atr = get_atr('30m')
     else:
         return None
 
-    print("[BOT] Current ATR:", atr)
+    print("[bot] current atr:", atr)
     print(type(current_price))
     print(type(atr['value']))
 
